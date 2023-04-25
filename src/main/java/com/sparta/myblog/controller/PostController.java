@@ -1,10 +1,11 @@
-package com.sparta.mybloglv3.controller;
+package com.sparta.myblog.controller;
 
-import com.sparta.mybloglv3.dto.MessageDto;
-import com.sparta.mybloglv3.dto.PostRequestDto;
-import com.sparta.mybloglv3.dto.PostResponseDto;
-import com.sparta.mybloglv3.service.PostService;
+import com.sparta.myblog.dto.MessageDto;
+import com.sparta.myblog.dto.PostRequestDto;
+import com.sparta.myblog.dto.PostResponseDto;
+import com.sparta.myblog.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,7 +44,7 @@ public class PostController {
 
     //게시글 삭제
     @DeleteMapping("/post/{id}")
-    public MessageDto deletePost(@PathVariable Long id, HttpServletRequest request){
+    public ResponseEntity<MessageDto> deletePost(@PathVariable Long id, HttpServletRequest request){
         return postService.deletePost(id, request);
     }
 }

@@ -1,13 +1,11 @@
-package com.sparta.mybloglv3.controller;
+package com.sparta.myblog.controller;
 
-import com.sparta.mybloglv3.dto.LoginRequestDto;
-import com.sparta.mybloglv3.dto.SignupRequestDto;
-import com.sparta.mybloglv3.service.UserService;
+import com.sparta.myblog.dto.LoginRequestDto;
+import com.sparta.myblog.dto.SignupRequestDto;
+import com.sparta.myblog.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;

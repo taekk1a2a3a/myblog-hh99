@@ -1,6 +1,6 @@
-package com.sparta.mybloglv3.entity;
+package com.sparta.myblog.entity;
 
-import com.sparta.mybloglv3.dto.PostRequestDto;
+import com.sparta.myblog.dto.PostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

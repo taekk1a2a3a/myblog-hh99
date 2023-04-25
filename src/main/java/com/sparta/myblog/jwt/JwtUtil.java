@@ -1,5 +1,6 @@
-package com.sparta.mybloglv3.jwt;
+package com.sparta.myblog.jwt;
 
+import com.sparta.myblog.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
@@ -33,7 +34,7 @@ public class JwtUtil {
     @PostConstruct
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretKey);
-        key = Keys.hmacShaKeyFor(bytes);
+        key = Keys.hmacShaKeyFor(bytes); //SHA256
     }
 
     // header 토큰을 가져오기
@@ -46,12 +47,13 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    public String createToken(String username) {
+    public String createToken(String username, UserRoleEnum role) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username)
+                        .claim(AUTHORIZATION_KEY, role)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)

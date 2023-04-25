@@ -1,6 +1,6 @@
-package com.sparta.mybloglv3.dto;
+package com.sparta.myblog.dto;
 
-import com.sparta.mybloglv3.entity.Post;
+import com.sparta.myblog.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +15,6 @@ public class PostResponseDto {
     private String contents;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-
 
     public PostResponseDto(Post post){
         this.id = post.getId();

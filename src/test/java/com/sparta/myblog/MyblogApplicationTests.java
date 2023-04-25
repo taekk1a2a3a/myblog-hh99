@@ -1,10 +1,10 @@
-package com.sparta.mybloglv3;
+package com.sparta.myblog;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MyblogLv3ApplicationTests {
+class MyblogApplicationTests {
 
     @Test
     void contextLoads() {

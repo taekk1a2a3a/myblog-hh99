@@ -1,6 +1,6 @@
-package com.sparta.mybloglv3.repository;
+package com.sparta.myblog.repository;
 
-import com.sparta.mybloglv3.entity.Users;
+import com.sparta.myblog.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

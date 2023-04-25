@@ -1,16 +1,18 @@
-package com.sparta.mybloglv3.service;
+package com.sparta.myblog.service;
 
-import com.sparta.mybloglv3.dto.MessageDto;
-import com.sparta.mybloglv3.dto.PostRequestDto;
-import com.sparta.mybloglv3.dto.PostResponseDto;
-import com.sparta.mybloglv3.entity.Post;
-import com.sparta.mybloglv3.entity.StatusEnum;
-import com.sparta.mybloglv3.entity.Users;
-import com.sparta.mybloglv3.jwt.JwtUtil;
-import com.sparta.mybloglv3.repository.PostRepository;
-import com.sparta.mybloglv3.repository.UserRepository;
+import com.sparta.myblog.dto.MessageDto;
+import com.sparta.myblog.dto.PostRequestDto;
+import com.sparta.myblog.dto.PostResponseDto;
+import com.sparta.myblog.entity.Post;
+import com.sparta.myblog.entity.StatusEnum;
+import com.sparta.myblog.entity.Users;
+import com.sparta.myblog.jwt.JwtUtil;
+import com.sparta.myblog.repository.PostRepository;
+import com.sparta.myblog.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +40,6 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostResponseDto getPost(Long id){
         Post post = findPostById(id);
-        System.out.println("선택한 게시글 조회 post -> "+post);
         return new PostResponseDto(post);
     }
 
@@ -63,14 +64,15 @@ public class PostService {
     }
 
     //게시글 삭제
-    public MessageDto deletePost(Long id, HttpServletRequest request) {
+    public ResponseEntity<MessageDto> deletePost(Long id, HttpServletRequest request) {
         String token = getToken(request);
         Claims claims = jwtUtil.getUserInfoFromToken(token);
         Users user = findUser(claims);
         Post post = findPostById(id);
         isUsersPost(user,post);
         postRepository.deleteById(id);
-        return new MessageDto("게시글 삭제 성공", StatusEnum.OK);
+        MessageDto messageDto = MessageDto.setSuccess(StatusEnum.OK.getStatusCode(), "게시글 삭제 완료", null);
+        return new ResponseEntity(messageDto, HttpStatus.OK);
     }
 
     //게시글 확인

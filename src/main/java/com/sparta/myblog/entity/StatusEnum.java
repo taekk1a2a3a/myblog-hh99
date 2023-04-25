@@ -1,4 +1,4 @@
-package com.sparta.mybloglv3.entity;
+package com.sparta.myblog.entity;
 
 public enum StatusEnum {
 
@@ -13,5 +13,12 @@ public enum StatusEnum {
     StatusEnum(int statusCode, String code) {
         this.statusCode = statusCode;
         this.code = code;
+    }
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public String getCode() {
+        return code;
     }
 }
