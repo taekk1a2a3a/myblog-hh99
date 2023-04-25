@@ -1,5 +1,6 @@
 package com.sparta.myblog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.myblog.dto.ReplyRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +23,13 @@ public class Reply extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 
-    public Reply(ReplyRequestDto requestDto, Users user) {
-
+    public Reply(ReplyRequestDto requestDto, Users user, Post post) {
+        this.contents = requestDto.getContents();
+        this.user = user;
+        this.post = post;
     }
 }

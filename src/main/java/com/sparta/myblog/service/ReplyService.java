@@ -31,7 +31,7 @@ public class ReplyService {
         Claims claims = jwtUtil.getUserInfoFromToken(token);
         Users user = findUser(claims);
         Post post = findPostById(postId);
-        Reply reply = new Reply(requestDto, user);
+        Reply reply = new Reply(requestDto, user, post);
         return new ReplyReponseDto(replyRepository.save(reply));
     }
 

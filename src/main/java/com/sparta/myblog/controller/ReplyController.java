@@ -16,7 +16,7 @@ public class ReplyController {
     private final ReplyService replyService;
 
     //댓글 작성
-    @PostMapping
+    @PostMapping("/{postId}")
     public ReplyReponseDto createReply(@PathVariable Long postId, @RequestBody ReplyRequestDto requestDto, HttpServletRequest request){
         return replyService.createReply(postId, requestDto, request);
     }
