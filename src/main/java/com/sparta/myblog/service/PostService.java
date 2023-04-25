@@ -5,6 +5,7 @@ import com.sparta.myblog.dto.PostRequestDto;
 import com.sparta.myblog.dto.PostResponseDto;
 import com.sparta.myblog.entity.Post;
 import com.sparta.myblog.entity.StatusEnum;
+import com.sparta.myblog.entity.UserRoleEnum;
 import com.sparta.myblog.entity.Users;
 import com.sparta.myblog.jwt.JwtUtil;
 import com.sparta.myblog.repository.PostRepository;
@@ -58,7 +59,9 @@ public class PostService {
         Claims claims = jwtUtil.getUserInfoFromToken(token);
         Users user = findUser(claims);
         Post post = findPostById(id);
-        isUsersPost(user,post);
+        if (user.getRole().equals(UserRoleEnum.USER)) {
+            isUsersPost(user,post);
+        }
         post.update(requestDto);
         return new PostResponseDto(post);
     }
@@ -69,7 +72,9 @@ public class PostService {
         Claims claims = jwtUtil.getUserInfoFromToken(token);
         Users user = findUser(claims);
         Post post = findPostById(id);
-        isUsersPost(user,post);
+        if (user.getRole().equals(UserRoleEnum.USER)) {
+            isUsersPost(user,post);
+        }
         postRepository.deleteById(id);
         MessageDto messageDto = MessageDto.setSuccess(StatusEnum.OK.getStatusCode(), "게시글 삭제 완료", null);
         return new ResponseEntity(messageDto, HttpStatus.OK);
