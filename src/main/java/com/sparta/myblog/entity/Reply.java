@@ -19,7 +19,6 @@ public class Reply extends Timestamped {
     private Long id;
     @Column(nullable = false)
     private String contents;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;

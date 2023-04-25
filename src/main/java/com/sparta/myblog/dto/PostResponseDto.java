@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -15,6 +17,7 @@ public class PostResponseDto {
     private String contents;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private List<ReplyReponseDto> replyList = new ArrayList<>();
 
     public PostResponseDto(Post post){
         this.id = post.getId();
@@ -23,6 +26,7 @@ public class PostResponseDto {
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
+        this.replyList = post.getReplyList().stream().map(ReplyReponseDto::new).toList();
     }
 
 }
