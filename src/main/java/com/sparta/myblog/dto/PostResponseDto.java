@@ -1,12 +1,15 @@
 package com.sparta.myblog.dto;
 
 import com.sparta.myblog.entity.Post;
+import com.sparta.myblog.entity.Reply;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -26,7 +29,10 @@ public class PostResponseDto {
         this.contents = post.getContents();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
-        this.replyList = post.getReplyList().stream().map(ReplyReponseDto::new).toList();
+        this.replyList = post.getReplyList()
+                .stream()
+                .sorted(Comparator.comparing(Reply::getCreatedAt).reversed())
+                .map(ReplyReponseDto::new)
+                .collect(Collectors.toList());
     }
-
 }

@@ -25,7 +25,7 @@ public class Post extends Timestamped {
     @JoinColumn(name = "user_id")
     private Users user;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Reply> replyList = new ArrayList<>();
 
     public Post(PostRequestDto requestDto, Users user) {

@@ -4,6 +4,8 @@ import com.sparta.myblog.dto.MessageDto;
 import com.sparta.myblog.dto.ReplyReponseDto;
 import com.sparta.myblog.dto.ReplyRequestDto;
 import com.sparta.myblog.entity.*;
+import com.sparta.myblog.exception.CustomException;
+import com.sparta.myblog.exception.ErrorCode;
 import com.sparta.myblog.jwt.JwtUtil;
 import com.sparta.myblog.repository.PostRepository;
 import com.sparta.myblog.repository.ReplyRepository;
@@ -49,6 +51,7 @@ public class ReplyService {
         reply.update(requestDto, user);
         return new ReplyReponseDto(reply);
     }
+
     //댓글 삭제
     public ResponseEntity<MessageDto> deleteReply(Long replyId, HttpServletRequest request){
         String token = getToken(request);
@@ -63,26 +66,24 @@ public class ReplyService {
         return new ResponseEntity(messageDto, HttpStatus.OK);
     }
 
-
-    //----
     //게시글 확인
     public Post findPostById(Long id){
         return postRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+                () -> new CustomException(ErrorCode.POST_NOT_FOUND));
     }
     //사용자 확인
     public Users findUser(Claims claims){
         return  userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                () -> new IllegalArgumentException("사용자가 존재하지 않습니다."));
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
     //토큰 확인
     public String getToken(HttpServletRequest request){
         String token = jwtUtil.resolveToken(request);
         if(token == null) {
-            throw new NoSuchElementException("올바르지 않은 접근입니다.");
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         if (!jwtUtil.validateToken(token)) {
-            throw new IllegalArgumentException("Token Error");
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         return token;
     }
@@ -94,7 +95,7 @@ public class ReplyService {
     //댓글 주인 확인
     public void isUserReply(Users user, Reply reply){
         if (!reply.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("작성자만 수정, 삭제 가능합니다.");
+            throw new CustomException(ErrorCode.NOT_AUTHORIZED_USER);
         }
     }
 }

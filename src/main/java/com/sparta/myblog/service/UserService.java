@@ -6,6 +6,8 @@ import com.sparta.myblog.dto.SignupRequestDto;
 import com.sparta.myblog.entity.StatusEnum;
 import com.sparta.myblog.entity.UserRoleEnum;
 import com.sparta.myblog.entity.Users;
+import com.sparta.myblog.exception.CustomException;
+import com.sparta.myblog.exception.ErrorCode;
 import com.sparta.myblog.jwt.JwtUtil;
 import com.sparta.myblog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +35,12 @@ public class UserService {
         // 회원 중복 확인
         Optional<Users> found = userRepository.findByUsername(username);
         if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_IDENTIFIER);
         }
         // 회원 Role 확인
         if (signupRequestDto.isAdmin()) {
             if (!signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
-                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+                throw new CustomException(ErrorCode.INCORRECT_ADMIN_KEY);
             }
             signupRequestDto.setRole(UserRoleEnum.ADMIN);
         }
@@ -55,11 +57,10 @@ public class UserService {
         String password = loginRequestDto.getPassword();
 
         Users user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
-        );
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if(!user.getPassword().equals(password)){
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
         MessageDto messageDto = MessageDto.setSuccess(StatusEnum.OK.getStatusCode(), "사용자 로그인 완료", null);
