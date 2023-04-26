@@ -1,7 +1,7 @@
 package com.sparta.myblog.controller;
 
 import com.sparta.myblog.dto.MessageDto;
-import com.sparta.myblog.dto.ReplyReponseDto;
+import com.sparta.myblog.dto.ReplyResponseDto;
 import com.sparta.myblog.dto.ReplyRequestDto;
 import com.sparta.myblog.service.ReplyService;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +19,12 @@ public class ReplyController {
 
     //댓글 작성
     @PostMapping("/{postId}")
-    public ReplyReponseDto createReply(@PathVariable Long postId, @RequestBody ReplyRequestDto requestDto, HttpServletRequest request){
+    public ReplyResponseDto createReply(@PathVariable Long postId, @RequestBody ReplyRequestDto requestDto, HttpServletRequest request){
         return replyService.createReply(postId, requestDto, request);
     }
     //댓글 수정
     @PutMapping("/{replyId}")
-    public ReplyReponseDto updateReply(@PathVariable Long replyId, @RequestBody ReplyRequestDto requestDto, HttpServletRequest request){
+    public ReplyResponseDto updateReply(@PathVariable Long replyId, @RequestBody ReplyRequestDto requestDto, HttpServletRequest request){
         return replyService.updateReply(replyId, requestDto, request);
     }
     //댓글 삭제

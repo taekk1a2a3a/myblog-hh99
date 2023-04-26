@@ -20,7 +20,7 @@ public class PostResponseDto {
     private String contents;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private List<ReplyReponseDto> replyList = new ArrayList<>();
+    private List<ReplyResponseDto> replyList = new ArrayList<>();
 
     public PostResponseDto(Post post){
         this.id = post.getId();
@@ -32,7 +32,7 @@ public class PostResponseDto {
         this.replyList = post.getReplyList()
                 .stream()
                 .sorted(Comparator.comparing(Reply::getCreatedAt).reversed())
-                .map(ReplyReponseDto::new)
+                .map(ReplyResponseDto::new)
                 .collect(Collectors.toList());
     }
 }

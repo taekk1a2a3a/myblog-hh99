@@ -5,11 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class ReplyReponseDto {
+public class ReplyResponseDto {
     private Long id;
     private String contents;
     private String username;
@@ -17,7 +16,7 @@ public class ReplyReponseDto {
     private LocalDateTime modifiedAt;
 
 
-    public ReplyReponseDto(Reply reply){
+    public ReplyResponseDto(Reply reply){
         this.id = reply.getId();
         this.contents = reply.getContents();
         this.username = reply.getUser().getUsername();

@@ -1,7 +1,7 @@
 package com.sparta.myblog.service;
 
 import com.sparta.myblog.dto.MessageDto;
-import com.sparta.myblog.dto.ReplyReponseDto;
+import com.sparta.myblog.dto.ReplyResponseDto;
 import com.sparta.myblog.dto.ReplyRequestDto;
 import com.sparta.myblog.entity.*;
 import com.sparta.myblog.exception.CustomException;
@@ -17,9 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.print.attribute.standard.MediaSize;
 import javax.servlet.http.HttpServletRequest;
-import java.util.NoSuchElementException;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -30,17 +29,17 @@ public class ReplyService {
     private final JwtUtil jwtUtil;
 
     //댓글 작성
-    public ReplyReponseDto createReply(Long postId, ReplyRequestDto requestDto, HttpServletRequest request) {
+    public ReplyResponseDto createReply(Long postId, ReplyRequestDto requestDto, HttpServletRequest request) {
         String token = getToken(request);
         Claims claims = jwtUtil.getUserInfoFromToken(token);
         Users user = findUser(claims);
         Post post = findPostById(postId);
         Reply reply = new Reply(requestDto, user, post);
-        return new ReplyReponseDto(replyRepository.save(reply));
+        return new ReplyResponseDto(replyRepository.save(reply));
     }
 
     //댓글 수정
-    public ReplyReponseDto updateReply(Long replyId, ReplyRequestDto requestDto, HttpServletRequest request){
+    public ReplyResponseDto updateReply(Long replyId, ReplyRequestDto requestDto, HttpServletRequest request){
         String token = getToken(request);
         Claims claims = jwtUtil.getUserInfoFromToken(token);
         Users user = findUser(claims);
@@ -49,7 +48,7 @@ public class ReplyService {
             isUserReply(user,reply);
         }
         reply.update(requestDto, user);
-        return new ReplyReponseDto(reply);
+        return new ReplyResponseDto(reply);
     }
 
     //댓글 삭제
