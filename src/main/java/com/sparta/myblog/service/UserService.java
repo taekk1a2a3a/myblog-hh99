@@ -13,6 +13,7 @@ import com.sparta.myblog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,12 +26,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     //회원가입
     @Transactional
     public ResponseEntity<MessageDto> signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
 
         // 회원 중복 확인
         Optional<Users> found = userRepository.findByUsername(username);
@@ -44,7 +47,7 @@ public class UserService {
             }
             signupRequestDto.setRole(UserRoleEnum.ADMIN);
         }
-        Users user = new Users(signupRequestDto);
+        Users user = new Users(signupRequestDto, password);
         userRepository.save(user);
         MessageDto messageDto = MessageDto.setSuccess(StatusEnum.OK.getStatusCode(), "회원가입 완료", null);
         return new ResponseEntity(messageDto, HttpStatus.OK);
@@ -59,7 +62,7 @@ public class UserService {
         Users user = userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        if(!user.getPassword().equals(password)){
+        if(!passwordEncoder.matches(password, user.getPassword())){
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));

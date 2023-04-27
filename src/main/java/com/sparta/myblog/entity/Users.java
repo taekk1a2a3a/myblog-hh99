@@ -26,9 +26,9 @@ public class Users {
     @Enumerated(value = EnumType.STRING) // STRING : 열거형 상수의 이름을 데이터베이스에 저장합니다. ORDINAL : 열거형 상수의 순서 값을 데이터베이스에 저장합니다.
     private UserRoleEnum role;
 
-    public Users(SignupRequestDto signupRequestDto) {
+    public Users(SignupRequestDto signupRequestDto, String password) {
         this.username = signupRequestDto.getUsername();
-        this.password = signupRequestDto.getPassword();
+        this.password = password;
         this.role = signupRequestDto.getRole();
     }
 }
