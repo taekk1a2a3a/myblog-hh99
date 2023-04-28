@@ -46,10 +46,7 @@ public class PostService {
     }
 
     //게시글 등록
-    public PostResponseDto createPost(PostRequestDto requestDto, HttpServletRequest request) {
-        String token = getToken(request);
-        Claims claims = jwtUtil.getUserInfoFromToken(token);
-        Users user = findUser(claims);
+    public PostResponseDto createPost(PostRequestDto requestDto, Users user) {
         Post post = new Post(requestDto, user);
         return new PostResponseDto(postRepository.save(post));
     }

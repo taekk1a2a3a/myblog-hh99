@@ -1,5 +1,7 @@
 package com.sparta.myblog.config;
 
+import com.sparta.myblog.jwt.JwtAuthFilter;
+import com.sparta.myblog.security.CustomSecurityFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -12,11 +14,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import javax.servlet.Filter;
+
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig {
+
+    private Filter JwtAuthFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -41,7 +47,6 @@ public class WebSecurityConfig {
                 .antMatchers("/posts/**").permitAll()
                 .antMatchers("/reply/**").permitAll()
                 .anyRequest().authenticated();
-
 
         return http.build();
     }
