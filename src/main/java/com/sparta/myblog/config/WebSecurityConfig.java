@@ -1,7 +1,7 @@
 package com.sparta.myblog.config;
 
 import com.sparta.myblog.jwt.JwtAuthFilter;
-import com.sparta.myblog.security.CustomSecurityFilter;
+import com.sparta.myblog.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -10,11 +10,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import javax.servlet.Filter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ import javax.servlet.Filter;
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig {
 
-    private Filter JwtAuthFilter;
+    private final JwtUtil jwtUtil;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,11 +42,17 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http.authorizeRequests().antMatchers("/user/**").permitAll()
-                .antMatchers("/post/**").permitAll()
+        // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.authorizeRequests()
+                .antMatchers("/user/**").permitAll()
+//                .antMatchers("/post/**").permitAll()
                 .antMatchers("/posts/**").permitAll()
-                .antMatchers("/reply/**").permitAll()
-                .anyRequest().authenticated();
+//                .antMatchers("/reply/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
 import java.util.List;
 
 @RestController
@@ -40,13 +38,13 @@ public class PostController {
 
     //게시글 수정
     @PutMapping("/post/{id}")
-    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto, HttpServletRequest request){
-        return postService.update(id, requestDto, request);
+    public PostResponseDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return postService.update(id, requestDto, userDetails.getUser());
     }
 
     //게시글 삭제
     @DeleteMapping("/post/{id}")
-    public ResponseEntity<MessageDto> deletePost(@PathVariable Long id, HttpServletRequest request){
-        return postService.deletePost(id, request);
+    public ResponseEntity<MessageDto> deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return postService.deletePost(id, userDetails.getUser());
     }
 }

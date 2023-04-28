@@ -1,10 +1,11 @@
 package com.sparta.myblog.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.myblog.dto.ReplyRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -12,6 +13,9 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
+@Table(name = "reply")
+@SQLDelete(sql = "UPDATE reply SET deleted = true WHERE reply_id = ?")
+@Where(clause = "deleted = false")
 public class Reply extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +29,9 @@ public class Reply extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
 
     public Reply(ReplyRequestDto requestDto, Users user, Post post) {
         this.contents = requestDto.getContents();
