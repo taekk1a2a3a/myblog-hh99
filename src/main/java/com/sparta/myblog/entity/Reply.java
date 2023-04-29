@@ -1,5 +1,7 @@
 package com.sparta.myblog.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.myblog.dto.ReplyRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,16 +23,21 @@ public class Reply extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reply_id")
     private Long id;
+
     @Column(nullable = false)
     private String contents;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;
+
     @ManyToOne
     @JoinColumn(name = "post_id")
+    @JsonBackReference
     private Post post;
 
     @Column(nullable = false)
+    @JsonIgnore
     private boolean deleted = false;
 
     public Reply(ReplyRequestDto requestDto, Users user, Post post) {

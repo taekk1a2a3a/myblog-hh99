@@ -1,5 +1,6 @@
 package com.sparta.myblog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.myblog.dto.PostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,10 @@ public class Post extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
+
     @Column(nullable = false)
     private String title;
+
     @Column(nullable = false)
     private String contents;
 
@@ -31,9 +34,11 @@ public class Post extends Timestamped {
     private Users user;
 
     @OneToMany(mappedBy = "post", orphanRemoval = true)
+    @OrderBy("createdAt desc")
     private List<Reply> replyList = new ArrayList<>();
 
     @Column(nullable = false)
+    @JsonIgnore
     private boolean deleted = false;
 
     public Post(PostRequestDto requestDto, Users user) {

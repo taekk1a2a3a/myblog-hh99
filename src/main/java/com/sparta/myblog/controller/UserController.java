@@ -1,7 +1,10 @@
 package com.sparta.myblog.controller;
 
 import com.sparta.myblog.dto.LoginRequestDto;
+import com.sparta.myblog.dto.ResponseMsgDto;
 import com.sparta.myblog.dto.SignupRequestDto;
+import com.sparta.myblog.entity.StatusEnum;
+import com.sparta.myblog.exception.CustomException;
 import com.sparta.myblog.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +21,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity signup(@Valid @RequestBody SignupRequestDto signupRequestDto){
+    public ResponseMsgDto signup(@RequestBody @Valid SignupRequestDto signupRequestDto){
         return userService.signup(signupRequestDto);
     }
 
     @ResponseBody
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response){
+    public ResponseMsgDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response){
         return userService.login(loginRequestDto, response);
     }
 }
