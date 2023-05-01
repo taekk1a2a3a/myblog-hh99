@@ -21,8 +21,8 @@ public class PostController {
     }
 
     //선택한 게시글 조회
-    @GetMapping("/post/{id}")
-    public ResponseMsgDto getPost(@PathVariable Long id){
+    @GetMapping("/posts/{post-id}")
+    public ResponseMsgDto getPost(@PathVariable(name = "post-id") Long id){
         return postService.getPost(id);
     }
 
@@ -33,14 +33,14 @@ public class PostController {
     }
 
     //게시글 수정
-    @PutMapping("/post/{id}")
-    public ResponseMsgDto updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    @PutMapping("/post/{post-id}")
+    public ResponseMsgDto updatePost(@PathVariable(name = "post-id") Long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return postService.update(id, requestDto, userDetails.getUser());
     }
 
     //게시글 삭제
-    @DeleteMapping("/post/{id}")
-    public ResponseMsgDto deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    @DeleteMapping("/post/{post-id}")
+    public ResponseMsgDto deletePost(@PathVariable(name = "post-id") Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return postService.deletePost(id, userDetails.getUser());
     }
 }

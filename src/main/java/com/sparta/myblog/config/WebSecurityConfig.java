@@ -1,10 +1,7 @@
 package com.sparta.myblog.config;
 
-import com.sparta.myblog.exception.CustomException;
-import com.sparta.myblog.exception.GlobalExceptionHandler;
 import com.sparta.myblog.jwt.JwtAuthFilter;
 import com.sparta.myblog.jwt.JwtUtil;
-import com.sparta.myblog.security.CustomSecurityFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -45,15 +42,14 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
-//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//         기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
                 .antMatchers("/user/**").permitAll()
-//                .antMatchers("/post/**").permitAll()
                 .antMatchers("/posts/**").permitAll()
 //                .antMatchers("/reply/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().authenticated() // 그 외의 어떤 요청이든 인증처리 하겠다는 의미
                 .and()
                 .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 

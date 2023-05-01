@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
         log.error("handleCustomException: {}", e.getStatusEnum());
         return ResponseEntity
                 .status(e.getStatusEnum().getStatus())
-                .body(Map.of("message", e.getStatusEnum().getMessage(), "status", e.getStatusEnum().getStatus()));
+                .body(Map.of("status", e.getStatusEnum().getStatus(), "message", e.getStatusEnum().getMessage()));
     }
 
     // Valid 예외 핸들러

@@ -1,7 +1,7 @@
 package com.sparta.myblog.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.myblog.dto.SecurityExceptionDto;
+import com.sparta.myblog.dto.ResponseMsgDto;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if(token != null) {
             if(!jwtUtil.validateToken(token)){
-                jwtExceptionHandler(response, "Token Error", HttpStatus.UNAUTHORIZED.value());
+                jwtExceptionHandler(response, HttpStatus.UNAUTHORIZED.value(), "Token Error");
                 return;
             }
             Claims info = jwtUtil.getUserInfoFromToken(token);
@@ -48,11 +48,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         SecurityContextHolder.setContext(context);
     }
 
-    public void jwtExceptionHandler(HttpServletResponse response, String msg, int statusCode) {
+    public void jwtExceptionHandler(HttpServletResponse response, int statusCode, String msg) {
         response.setStatus(statusCode);
         response.setContentType("application/json");
         try {
-            String json = new ObjectMapper().writeValueAsString(new SecurityExceptionDto(statusCode, msg));
+            String json = new ObjectMapper().writeValueAsString(ResponseMsgDto.setFail(statusCode, msg));
             response.getWriter().write(json);
         } catch (Exception e) {
             log.error(e.getMessage());

@@ -5,18 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor // (staticName = "add")
+@AllArgsConstructor
 public class ResponseMsgDto<T> {
-    private int statusCode;
+    private int status;
     private String message;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
-    public static <T> ResponseMsgDto<T> setSuccess(int statusCode, String message, T data){
-        return new ResponseMsgDto<>(statusCode, message, data);
+    public static <T> ResponseMsgDto<T> setSuccess(int status, String message, T data){
+        return new ResponseMsgDto<>(status, message, data);
     }
 
-    public static <T> ResponseMsgDto<T> setFail(int statusCode, String message){
-        return new ResponseMsgDto<>(statusCode, message, null);
+    public static <T> ResponseMsgDto<T> setFail(int status, String message){
+        return new ResponseMsgDto<>(status, message, null);
     }
 }

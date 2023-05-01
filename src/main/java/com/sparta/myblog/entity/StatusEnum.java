@@ -30,5 +30,4 @@ public enum StatusEnum {
     private final int status;
     private final String message;
 
-    
 }
