@@ -1,14 +1,13 @@
 package com.sparta.myblog.util;
 
-import com.sparta.myblog.entity.Post;
-import com.sparta.myblog.entity.Reply;
-import com.sparta.myblog.entity.StatusEnum;
-import com.sparta.myblog.entity.Users;
+import com.sparta.myblog.entity.*;
 import com.sparta.myblog.exception.CustomException;
 import com.sparta.myblog.repository.PostRepository;
 import com.sparta.myblog.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +38,28 @@ public class Utils {
         if (!reply.getUser().getId().equals(user.getId())) {
             throw new CustomException(StatusEnum.NOT_AUTHORIZED_USER);
         }
+    }
+    //좋아요 클릭 로직
+    public <T> void clickLikes(Optional<Likes> likes, T entity) {
+        if (entity instanceof Post post) {
+            if (likes.get().isDeleted()){
+                likes.get().setDeleted(false);
+                post.incLike();
+            }
+           else {
+               likes.get().setDeleted(true);
+               post.decLike();
+            }
+           postRepository.save(post);
+        } else if (entity instanceof Reply reply) {
+            if (likes.get().isDeleted()){
+                likes.get().setDeleted(false);
+                reply.incLike();
+            } else {
+                likes.get().setDeleted(true);
+                reply.decLike();
+            }
+            replyRepository.save(reply);
+        } else throw new CustomException(StatusEnum.BAD_REQUEST);
     }
 }

@@ -5,14 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.myblog.dto.ReplyRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.*;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "reply")
@@ -36,6 +36,14 @@ public class Reply extends Timestamped {
     @JsonBackReference
     private Post post;
 
+    @OneToMany(mappedBy = "reply", orphanRemoval = true)
+    @JsonIgnore
+    private List<Likes> likesList = new ArrayList<>();
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private int likes;
+
     @Column(nullable = false)
     @JsonIgnore
     private boolean deleted = false;
@@ -49,5 +57,12 @@ public class Reply extends Timestamped {
     public void update(ReplyRequestDto requestDto, Users user){
         this.contents = requestDto.getContents();
         this.user = user;
+    }
+
+    public void incLike() {
+        ++likes;
+    }
+    public void decLike() {
+        --likes;
     }
 }

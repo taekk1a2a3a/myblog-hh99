@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.myblog.dto.PostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Entity
@@ -34,6 +34,13 @@ public class Post extends Timestamped {
     private Users user;
 
     @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private List<Likes> likesList = new ArrayList<>();
+
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private int likes;
+
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
     @OrderBy("createdAt desc")
     private List<Reply> replyList = new ArrayList<>();
 
@@ -50,5 +57,12 @@ public class Post extends Timestamped {
     public void update(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
+    }
+
+    public void incLike() {
+        ++likes;
+    }
+    public void decLike() {
+        --likes;
     }
 }
