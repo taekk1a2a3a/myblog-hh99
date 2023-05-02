@@ -10,7 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 @RestControllerAdvice
 @Slf4j
@@ -19,9 +19,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity handleCustomException(final CustomException e) {
         log.error("handleCustomException: {}", e.getStatusEnum());
+        LinkedHashMap<String, Object> responseMap = new LinkedHashMap<>();
+        responseMap.put("status", e.getStatusEnum().getStatus());
+        responseMap.put("message", e.getStatusEnum().getMessage());
         return ResponseEntity
                 .status(e.getStatusEnum().getStatus())
-                .body(Map.of("status", e.getStatusEnum().getStatus(), "message", e.getStatusEnum().getMessage()));
+                .body(responseMap);
     }
 
     // Valid 예외 핸들러
