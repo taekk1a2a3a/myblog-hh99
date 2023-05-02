@@ -1,5 +1,6 @@
 package com.sparta.myblog.service;
 
+import com.sparta.myblog.dto.ReplyResponseDto;
 import com.sparta.myblog.dto.ResponseMsgDto;
 import com.sparta.myblog.dto.ReplyRequestDto;
 import com.sparta.myblog.entity.*;
@@ -21,7 +22,8 @@ public class ReplyService {
         Post post = utils.findPostById(postId);
         Reply reply = new Reply(requestDto, user, post);
         replyRepository.save(reply);
-        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "댓글 작성 완료", reply);
+        ReplyResponseDto replyResponseDto = new ReplyResponseDto(reply);
+        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "댓글 작성 완료", replyResponseDto);
     }
 
     //댓글 수정
@@ -31,7 +33,8 @@ public class ReplyService {
             utils.isUserReply(user,reply);
         }
         reply.update(requestDto, user);
-        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "댓글 수정 완료", reply);
+        ReplyResponseDto replyResponseDto = new ReplyResponseDto(reply);
+        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "댓글 수정 완료", replyResponseDto);
     }
 
     //댓글 삭제

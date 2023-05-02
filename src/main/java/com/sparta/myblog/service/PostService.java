@@ -1,6 +1,7 @@
 package com.sparta.myblog.service;
 
 import com.sparta.myblog.dto.PostRequestDto;
+import com.sparta.myblog.dto.PostResponseDto;
 import com.sparta.myblog.dto.ResponseMsgDto;
 import com.sparta.myblog.entity.Post;
 import com.sparta.myblog.entity.StatusEnum;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -24,8 +26,11 @@ public class PostService {
 
     //게시글 목록 조회
     @Transactional(readOnly = true)
-    public ResponseMsgDto getList() {
-         List<Post> postList = postRepository.findAllByOrderByCreatedAtDesc();
+    public ResponseMsgDto<List<PostResponseDto>> getList() {
+         List<PostResponseDto> postList = postRepository.findAllByOrderByCreatedAtDesc()
+                 .stream()
+                 .map(PostResponseDto::new)
+                 .collect(Collectors.toList());
         return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "게시글 목록 조회", postList);
     }
 
@@ -33,14 +38,16 @@ public class PostService {
     @Transactional(readOnly = true)
     public ResponseMsgDto getPost(Long id){
         Post post = utils.findPostById(id);
-        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "게시글 조회", post);
+        PostResponseDto postResponseDto = new PostResponseDto(post);
+        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "게시글 조회", postResponseDto);
     }
 
     //게시글 등록
     public ResponseMsgDto createPost(PostRequestDto requestDto, Users user) {
         Post post = new Post(requestDto, user);
         postRepository.save(post);
-        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "게시글 등록 완료", post);
+        PostResponseDto postResponseDto = new PostResponseDto(post);
+        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "게시글 등록 완료", postResponseDto);
     }
 
     //게시글 수정
@@ -51,7 +58,8 @@ public class PostService {
             utils.isUsersPost(user,post);
         }
         post.update(requestDto);
-        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "게시글 수정 완료", post);
+        PostResponseDto postResponseDto = new PostResponseDto(post);
+        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "게시글 수정 완료", postResponseDto);
     }
 
     //게시글 삭제
