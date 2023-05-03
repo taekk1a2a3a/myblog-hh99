@@ -3,11 +3,11 @@ package com.sparta.myblog.controller;
 import com.sparta.myblog.dto.LoginRequestDto;
 import com.sparta.myblog.dto.ResponseMsgDto;
 import com.sparta.myblog.dto.SignupRequestDto;
-import com.sparta.myblog.entity.StatusEnum;
-import com.sparta.myblog.exception.CustomException;
+import com.sparta.myblog.security.UserDetailsImpl;
 import com.sparta.myblog.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.apache.coyote.Response;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,5 +29,10 @@ public class UserController {
     @PostMapping("/login")
     public ResponseMsgDto login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response){
         return userService.login(loginRequestDto, response);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseMsgDto deleteAccount(@RequestBody LoginRequestDto loginRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.deleteAccount(loginRequestDto, userDetails.getUser());
     }
 }

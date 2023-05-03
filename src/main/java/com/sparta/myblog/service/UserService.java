@@ -72,4 +72,14 @@ public class UserService {
         }
         return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "사용자 로그인 완료", null);
     }
+
+    //회원탈퇴
+    public ResponseMsgDto deleteAccount(LoginRequestDto loginRequestDto, Users user){
+        String password = loginRequestDto.getPassword();
+        if(!passwordEncoder.matches(password, user.getPassword())){
+            throw new CustomException(StatusEnum.USER_NOT_FOUND);
+        }
+        userRepository.deleteById(user.getId());
+        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "회원 탈퇴 성공", null);
+    }
 }
