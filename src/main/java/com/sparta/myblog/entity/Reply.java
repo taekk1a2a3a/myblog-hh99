@@ -27,11 +27,11 @@ public class Reply extends Timestamped {
     @Column(nullable = false)
     private String contents;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     @JsonBackReference
     private Post post;

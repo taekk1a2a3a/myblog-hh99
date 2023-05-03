@@ -6,7 +6,6 @@ import com.sparta.myblog.dto.SignupRequestDto;
 import com.sparta.myblog.security.UserDetailsImpl;
 import com.sparta.myblog.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
