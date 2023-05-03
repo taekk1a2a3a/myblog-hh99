@@ -6,11 +6,13 @@ import com.sparta.myblog.repository.PostRepository;
 import com.sparta.myblog.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class Utils {
 
     private final PostRepository postRepository;
