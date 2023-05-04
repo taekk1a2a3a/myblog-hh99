@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/reply")
+@RequestMapping("reply")
 public class ReplyController {
 
     private final ReplyService replyService;

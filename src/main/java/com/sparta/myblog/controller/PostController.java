@@ -10,36 +10,37 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/posts")
 public class PostController {
 
     private final PostService postService;
 
     //게시글 목록 조회
-    @GetMapping("/posts")
+    @GetMapping()
     public ResponseMsgDto getList() {
         return postService.getList();
     }
 
     //선택한 게시글 조회
-    @GetMapping("/posts/{post-id}")
+    @GetMapping("/{post-id}")
     public ResponseMsgDto getPost(@PathVariable(name = "post-id") Long id){
         return postService.getPost(id);
     }
 
     //게시글 등록
-    @PostMapping("/post")
+    @PostMapping()
     public ResponseMsgDto createPost(@RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.createPost(requestDto, userDetails.getUser());
     }
 
     //게시글 수정
-    @PutMapping("/post/{post-id}")
+    @PutMapping("{post-id}")
     public ResponseMsgDto updatePost(@PathVariable(name = "post-id") Long id, @RequestBody PostRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return postService.update(id, requestDto, userDetails.getUser());
     }
 
     //게시글 삭제
-    @DeleteMapping("/post/{post-id}")
+    @DeleteMapping("{post-id}")
     public ResponseMsgDto deletePost(@PathVariable(name = "post-id") Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return postService.deletePost(id, userDetails.getUser());
     }
