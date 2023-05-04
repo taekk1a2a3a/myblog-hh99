@@ -1,6 +1,6 @@
 package com.sparta.myblog.security;
 
-import com.sparta.myblog.entity.Users;
+import com.sparta.myblog.entity.User;
 import com.sparta.myblog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +16,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
         return new UserDetailsImpl(user, user.getUsername());

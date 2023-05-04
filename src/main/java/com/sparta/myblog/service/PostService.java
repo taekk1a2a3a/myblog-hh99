@@ -6,7 +6,7 @@ import com.sparta.myblog.dto.ResponseMsgDto;
 import com.sparta.myblog.entity.Post;
 import com.sparta.myblog.entity.StatusEnum;
 import com.sparta.myblog.entity.UserRoleEnum;
-import com.sparta.myblog.entity.Users;
+import com.sparta.myblog.entity.User;
 import com.sparta.myblog.repository.PostRepository;
 import com.sparta.myblog.util.Utils;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class PostService {
     }
 
     //게시글 등록
-    public ResponseMsgDto createPost(PostRequestDto requestDto, Users user) {
+    public ResponseMsgDto createPost(PostRequestDto requestDto, User user) {
         Post post = new Post(requestDto, user);
         postRepository.save(post);
         PostResponseDto postResponseDto = new PostResponseDto(post);
@@ -51,7 +51,7 @@ public class PostService {
     }
 
     //게시글 수정
-    public ResponseMsgDto update(Long id, PostRequestDto requestDto, Users user) {
+    public ResponseMsgDto update(Long id, PostRequestDto requestDto, User user) {
 
         Post post = utils.findPostById(id);
         if (user.getRole().equals(UserRoleEnum.USER)) {
@@ -63,7 +63,7 @@ public class PostService {
     }
 
     //게시글 삭제
-    public ResponseMsgDto deletePost(Long id, Users user) {
+    public ResponseMsgDto deletePost(Long id, User user) {
 
         Post post = utils.findPostById(id);
         if (user.getRole().equals(UserRoleEnum.USER)) {

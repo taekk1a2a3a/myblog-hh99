@@ -1,7 +1,7 @@
 package com.sparta.myblog.security;
 
 import com.sparta.myblog.entity.UserRoleEnum;
-import com.sparta.myblog.entity.Users;
+import com.sparta.myblog.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,15 +11,15 @@ import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private final Users user;
+    private final User user;
     private final String username;
 
-    public UserDetailsImpl(Users user, String username) {
+    public UserDetailsImpl(User user, String username) {
         this.user = user;
         this.username = username;
     }
 
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 

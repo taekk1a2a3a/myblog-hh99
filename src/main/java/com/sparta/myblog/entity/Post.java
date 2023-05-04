@@ -31,10 +31,10 @@ public class Post extends Timestamped {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private Users user;
+    private User user;
 
     @OneToMany(mappedBy = "post", orphanRemoval = true)
-    private List<Likes> likesList = new ArrayList<>();
+    private List<Like> likeList = new ArrayList<>();
 
     @Column(nullable = false)
     @ColumnDefault("0")
@@ -48,7 +48,7 @@ public class Post extends Timestamped {
     @JsonIgnore
     private boolean deleted = false;
 
-    public Post(PostRequestDto requestDto, Users user) {
+    public Post(PostRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
         this.user = user;

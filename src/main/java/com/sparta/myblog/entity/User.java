@@ -20,7 +20,7 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE users SET deleted = true WHERE user_id = ?")
 @Where(clause = "deleted = false")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Users {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -48,14 +48,14 @@ public class Users {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonBackReference
-    private List<Likes> likesList = new ArrayList<>();
+    private List<Like> likeList = new ArrayList<>();
 
 
     @Column(nullable = false)
     @JsonIgnore
     private boolean deleted = false;
 
-    public Users(SignupRequestDto signupRequestDto, String password) {
+    public User(SignupRequestDto signupRequestDto, String password) {
         this.username = signupRequestDto.getUsername();
         this.password = password;
         this.role = signupRequestDto.getRole();

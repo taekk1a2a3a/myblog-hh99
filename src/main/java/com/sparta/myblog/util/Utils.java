@@ -24,7 +24,7 @@ public class Utils {
                 () -> new CustomException(StatusEnum.POST_NOT_FOUND));
     }
     //작성자 게시물 확인
-    public void isUsersPost(Users user, Post post){
+    public void isUsersPost(User user, Post post){
         if (!post.getUser().getId().equals(user.getId())) {
             throw new CustomException(StatusEnum.NOT_AUTHORIZED_USER);
         }
@@ -36,13 +36,13 @@ public class Utils {
                 () -> new CustomException(StatusEnum.REPLY_NOT_FOUND));
         }
     //댓글 주인 확인
-    public void isUserReply(Users user, Reply reply){
+    public void isUserReply(User user, Reply reply){
         if (!reply.getUser().getId().equals(user.getId())) {
             throw new CustomException(StatusEnum.NOT_AUTHORIZED_USER);
         }
     }
     //좋아요 클릭 로직
-    public <T> void clickLikes(Optional<Likes> likes, T entity) {
+    public <T> void clickLikes(Optional<Like> likes, T entity) {
         if (entity instanceof Post post) {
             if (likes.get().isDeleted()){
                 likes.get().setDeleted(false);

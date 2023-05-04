@@ -19,14 +19,14 @@ public class LikeService {
     private final LikeRepository likeRepository;
 
     // 게시글 좋아요
-    public ResponseMsgDto postLikes(Long id, Users user){
+    public ResponseMsgDto postLikes(Long id, User user){
         Post post = utils.findPostById(id);
-        Optional<Likes> likes = likeRepository.findByUserAndPost(user, post);
+        Optional<Like> likes = likeRepository.findByUserAndPost(user, post);
         if (likes.isPresent()){
             utils.clickLikes(likes, post);
             if (likes.get().isDeleted()){return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "게시글 좋아요 취소", null);}
         } else {
-            Likes firstLike = new Likes(user, post);
+            Like firstLike = new Like(user, post);
             likeRepository.save(firstLike);
             post.incLike();
         }
@@ -37,19 +37,19 @@ public class LikeService {
     @Transactional(readOnly = true)
     public ResponseMsgDto postLikesList(Long id) {
         Post post = utils.findPostById(id);
-        List<Likes> likesList = likeRepository.findAllByPost(post);
-        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "이 게시글을 좋아하는 사람", likesList);
+        List<Like> likeList = likeRepository.findAllByPost(post);
+        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "이 게시글을 좋아하는 사람", likeList);
     }
 
     // 댓글 좋아요
-    public ResponseMsgDto replyLikes(Long id, Users user){
+    public ResponseMsgDto replyLikes(Long id, User user){
         Reply reply = utils.findReplyById(id);
-        Optional<Likes> likes = likeRepository.findByUserAndReply(user,reply);
+        Optional<Like> likes = likeRepository.findByUserAndReply(user,reply);
         if (likes.isPresent()){
             utils.clickLikes(likes, reply);
             if (likes.get().isDeleted()){return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "댓글 좋아요 취소", null);}
         } else {
-            Likes firstLike = new Likes(user, reply);
+            Like firstLike = new Like(user, reply);
             likeRepository.save(firstLike);
             reply.incLike();
         }
@@ -60,7 +60,7 @@ public class LikeService {
     @Transactional(readOnly = true)
     public ResponseMsgDto replyLikesList(Long id) {
         Reply reply = utils.findReplyById(id);
-        List<Likes> likesList = likeRepository.findAllByReply(reply);
-        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "이 댓글을 좋아하는 사람", likesList);
+        List<Like> likeList = likeRepository.findAllByReply(reply);
+        return ResponseMsgDto.setSuccess(StatusEnum.OK.getStatus(), "이 댓글을 좋아하는 사람", likeList);
     }
 }

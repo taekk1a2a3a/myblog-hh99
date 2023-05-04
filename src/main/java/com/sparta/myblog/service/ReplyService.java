@@ -18,7 +18,7 @@ public class ReplyService {
     private final Utils utils;
 
     //댓글 작성
-    public ResponseMsgDto createReply(Long postId, ReplyRequestDto requestDto, Users user) {
+    public ResponseMsgDto createReply(Long postId, ReplyRequestDto requestDto, User user) {
         Post post = utils.findPostById(postId);
         Reply reply = new Reply(requestDto, user, post);
         replyRepository.save(reply);
@@ -27,7 +27,7 @@ public class ReplyService {
     }
 
     //댓글 수정
-    public ResponseMsgDto updateReply(Long replyId, ReplyRequestDto requestDto, Users user){
+    public ResponseMsgDto updateReply(Long replyId, ReplyRequestDto requestDto, User user){
         Reply reply = utils.findReplyById(replyId);
         if (user.getRole().equals(UserRoleEnum.USER)){
             utils.isUserReply(user,reply);
@@ -38,7 +38,7 @@ public class ReplyService {
     }
 
     //댓글 삭제
-    public ResponseMsgDto deleteReply(Long replyId, Users user){
+    public ResponseMsgDto deleteReply(Long replyId, User user){
         Reply reply = utils.findReplyById(replyId);
         if (user.getRole().equals(UserRoleEnum.USER)){
             utils.isUserReply(user,reply);

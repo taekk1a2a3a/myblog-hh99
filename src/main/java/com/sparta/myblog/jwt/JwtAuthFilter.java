@@ -2,14 +2,12 @@ package com.sparta.myblog.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.myblog.dto.ResponseMsgDto;
-import com.sparta.myblog.entity.Users;
+import com.sparta.myblog.entity.User;
 import com.sparta.myblog.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -45,7 +43,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 boolean isRefreshToken = jwtUtil.refreshTokenValidation(refresh_token);
                 // 리프레시 토큰으로 username, Member DB 에서 username 을 가진 member 가져오기
                 String username = jwtUtil.getUserInfoFromToken(refresh_token);
-                Users user = userRepository.findByUsername(username).get();
+                User user = userRepository.findByUsername(username).get();
                 // 새로운 액세스 토큰 발급
                 String newAccessToken = jwtUtil.create(username, user.getRole(), "Access");
                 // 헤더에 액세스 토큰 추가

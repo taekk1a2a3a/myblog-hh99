@@ -16,7 +16,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "likes")
 @SQLDelete(sql = "UPDATE likes SET deleted = true WHERE likes_id = ?")
-public class Likes {
+public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class Likes {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonManagedReference
-    private Users user;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
@@ -42,11 +42,11 @@ public class Likes {
     @JsonIgnore
     private boolean deleted = false;
 
-    public Likes(Users user, Post post) {
+    public Like(User user, Post post) {
         this.user = user;
         this.post = post;
     }
-    public Likes(Users user, Reply reply){
+    public Like(User user, Reply reply){
         this.user = user;
         this.reply = reply;
     }

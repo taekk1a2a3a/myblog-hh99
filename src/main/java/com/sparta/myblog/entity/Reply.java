@@ -29,7 +29,7 @@ public class Reply extends Timestamped {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private Users user;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
@@ -38,7 +38,7 @@ public class Reply extends Timestamped {
 
     @OneToMany(mappedBy = "reply", orphanRemoval = true)
     @JsonIgnore
-    private List<Likes> likesList = new ArrayList<>();
+    private List<Like> likeList = new ArrayList<>();
 
     @Column(nullable = false)
     @ColumnDefault("0")
@@ -48,13 +48,13 @@ public class Reply extends Timestamped {
     @JsonIgnore
     private boolean deleted = false;
 
-    public Reply(ReplyRequestDto requestDto, Users user, Post post) {
+    public Reply(ReplyRequestDto requestDto, User user, Post post) {
         this.contents = requestDto.getContents();
         this.user = user;
         this.post = post;
     }
 
-    public void update(ReplyRequestDto requestDto, Users user){
+    public void update(ReplyRequestDto requestDto, User user){
         this.contents = requestDto.getContents();
         this.user = user;
     }
