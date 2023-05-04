@@ -3,11 +3,14 @@ package com.sparta.myblog.service;
 import com.sparta.myblog.dto.LoginRequestDto;
 import com.sparta.myblog.dto.ResponseMsgDto;
 import com.sparta.myblog.dto.SignupRequestDto;
+import com.sparta.myblog.dto.TokenDto;
+import com.sparta.myblog.entity.RefreshToken;
 import com.sparta.myblog.entity.StatusEnum;
 import com.sparta.myblog.entity.UserRoleEnum;
 import com.sparta.myblog.entity.Users;
 import com.sparta.myblog.exception.CustomException;
 import com.sparta.myblog.jwt.JwtUtil;
+import com.sparta.myblog.repository.RefreshTokenRepository;
 import com.sparta.myblog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,10 +24,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder;
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     //회원가입
     @Transactional
@@ -63,8 +68,23 @@ public class UserService {
         if(!passwordEncoder.matches(password, user.getPassword())){
             throw new CustomException(StatusEnum.USER_NOT_FOUND);
         }
-        // 토큰 추가
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+        //username 정보로 Token 생성
+        TokenDto tokenDto = jwtUtil.createAllToken(loginRequestDto.getUsername(), user.getRole());
+        //Refresh 토큰 있는지 확인
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(loginRequestDto.getUsername());
+        //Refresh 토큰이 있다면 새로 발급 후 업데이트
+        //없다면 새로 만들고 DB에 저장
+        if (refreshToken.isPresent()) {
+            RefreshToken savedRefreshToken = refreshToken.get();
+            RefreshToken updateToken = savedRefreshToken.updateToken(tokenDto.getRefreshToken().substring(7));
+            refreshTokenRepository.save(updateToken);
+        } else {
+            RefreshToken newToken = new RefreshToken(tokenDto.getRefreshToken().substring(7), username);
+            refreshTokenRepository.save(newToken);
+        }
+        //응답 헤더에 토큰 추가
+        response.addHeader(jwtUtil.ACCESS_KEY, tokenDto.getAccessToken());
+        response.addHeader(jwtUtil.REFRESH_KEY, tokenDto.getRefreshToken());
 
         // 로그인 메세지 (관리자, 사용자)
         if(user.getRole().equals(UserRoleEnum.ADMIN)){

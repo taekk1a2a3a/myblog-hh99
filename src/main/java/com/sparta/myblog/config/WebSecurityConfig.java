@@ -23,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
+    private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,16 +43,16 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-//         기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
+        // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+        //해당 경로로 들어오는 요청은 처리 무시
         http.authorizeRequests()
-                .antMatchers("/user/**").permitAll()
-                .antMatchers("/posts/**").permitAll()
-//                .antMatchers("/reply/**").permitAll()
-                .anyRequest().authenticated() // 그 외의 어떤 요청이든 인증처리 하겠다는 의미
-                .and()
-                .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .antMatchers("/**").permitAll()
+                // 그 외의 어떤 요청이든 인증처리 하겠다는 의미
+                .anyRequest().authenticated();
+
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
