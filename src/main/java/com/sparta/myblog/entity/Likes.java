@@ -2,6 +2,7 @@ package com.sparta.myblog.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,11 +21,11 @@ public class Likes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "likes_id")
-    @JsonIgnore
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonManagedReference
     private Users user;
 
     @ManyToOne(fetch = FetchType.LAZY)

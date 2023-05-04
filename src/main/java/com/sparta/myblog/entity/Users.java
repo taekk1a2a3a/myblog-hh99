@@ -2,6 +2,7 @@ package com.sparta.myblog.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sparta.myblog.dto.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 @Table(name = "users")
 @SQLDelete(sql = "UPDATE users SET deleted = true WHERE user_id = ?")
 @Where(clause = "deleted = false")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +47,7 @@ public class Users {
     private List<Reply> replyList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    @JsonIgnore
+    @JsonBackReference
     private List<Likes> likesList = new ArrayList<>();
 
 
