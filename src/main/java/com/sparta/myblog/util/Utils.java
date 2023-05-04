@@ -41,27 +41,4 @@ public class Utils {
             throw new CustomException(StatusEnum.NOT_AUTHORIZED_USER);
         }
     }
-    //좋아요 클릭 로직
-    public <T> void clickLikes(Optional<Like> likes, T entity) {
-        if (entity instanceof Post post) {
-            if (likes.get().isDeleted()){
-                likes.get().setDeleted(false);
-                post.incLike();
-            }
-           else {
-               likes.get().setDeleted(true);
-               post.decLike();
-            }
-           postRepository.save(post);
-        } else if (entity instanceof Reply reply) {
-            if (likes.get().isDeleted()){
-                likes.get().setDeleted(false);
-                reply.incLike();
-            } else {
-                likes.get().setDeleted(true);
-                reply.decLike();
-            }
-            replyRepository.save(reply);
-        } else throw new CustomException(StatusEnum.BAD_REQUEST);
-    }
 }

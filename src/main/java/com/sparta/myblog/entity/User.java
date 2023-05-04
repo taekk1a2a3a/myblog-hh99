@@ -48,7 +48,11 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonBackReference
-    private List<Like> likeList = new ArrayList<>();
+    private List<PostLike> postLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonBackReference
+    private List<ReplyLike> replyLikes = new ArrayList<>();
 
 
     @Column(nullable = false)

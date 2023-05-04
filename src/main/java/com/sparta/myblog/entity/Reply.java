@@ -38,7 +38,7 @@ public class Reply extends Timestamped {
 
     @OneToMany(mappedBy = "reply", orphanRemoval = true)
     @JsonIgnore
-    private List<Like> likeList = new ArrayList<>();
+    private List<ReplyLike> likeList = new ArrayList<>();
 
     @Column(nullable = false)
     @ColumnDefault("0")

@@ -14,13 +14,13 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "likes")
-@SQLDelete(sql = "UPDATE likes SET deleted = true WHERE likes_id = ?")
-public class Like {
+@Table(name = "postlike")
+@SQLDelete(sql = "UPDATE postlike SET deleted = true WHERE postlikes_id = ?")
+public class PostLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "likes_id")
+    @Column(name = "postlikes_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,21 +33,12 @@ public class Like {
     @JsonBackReference
     private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reply_id")
-    @JsonBackReference
-    private Reply reply;
-
     @Column(nullable = false)
     @JsonIgnore
     private boolean deleted = false;
 
-    public Like(User user, Post post) {
+    public PostLike(User user, Post post){
         this.user = user;
         this.post = post;
-    }
-    public Like(User user, Reply reply){
-        this.user = user;
-        this.reply = reply;
     }
 }

@@ -34,7 +34,7 @@ public class Post extends Timestamped {
     private User user;
 
     @OneToMany(mappedBy = "post", orphanRemoval = true)
-    private List<Like> likeList = new ArrayList<>();
+    private List<PostLike> likeList = new ArrayList<>();
 
     @Column(nullable = false)
     @ColumnDefault("0")
