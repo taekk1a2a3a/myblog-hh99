@@ -36,6 +36,9 @@ dependencies {
 
     // 스프링 시큐리티
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // 이미지 업로드
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 
 tasks.named('test') {
